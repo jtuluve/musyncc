@@ -1,6 +1,24 @@
 {
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "build": "npm install && tsc",
+    "start": "node dist/server.js",
+    "dev": "npx nodemon server.ts"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "express": "^4.21.2",
     "mongoose": "^8.9.5",
     "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.12.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   }
 }

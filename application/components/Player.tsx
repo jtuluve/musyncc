@@ -1,10 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
-import YouTube from "react-youtube";
-let i;
+import { useEffect, useRef, useState } from "react";
+import YouTube, { YouTubeEvent } from "react-youtube";
+import { useSocket } from "./SocketContext";
 export const Player = ({ videoId }) => {
-  const [currentTime, setCurrentTime] = useState(0);
+  const { roomId, socket } = useSocket();
   const playerRef = useRef(null);
   // Player options
   const opts = {
@@ -18,10 +18,36 @@ export const Player = ({ videoId }) => {
     },
   };
 
+  useEffect(() => {
+    console.log("Player mounted");
+    if (!socket) return;
+    socket.on("play-client", ({ sender, time }) => {
+      console.log("play-client", sender, time);
+      if (sender === socket.id) return;
+      playerRef.current.internalPlayer.seekTo(time);
+      playerRef.current.internalPlayer.playVideo();
+    });
+    socket.on("pause-client", ({ sender, time }) => {
+      console.log("pause-client", sender, time);
+      if (sender === socket.id) return;
+      playerRef.current.internalPlayer.seekTo(time);
+      playerRef.current.internalPlayer.pauseVideo();
+    });
+    return () => {
+      socket.off("play-client");
+      socket.off("pause-client");
+    };
+  }, [socket]);
   // Handle player state change
-  const onStateChange = (event) => {
+  const onStateChange = (event: YouTubeEvent<number>) => {
+    if (!roomId) return;
     const player = event.target;
-    setCurrentTime(player.getCurrentTime()); // Get current time in seconds
+    console.log("onStateChange", event.data, player.getCurrentTime());
+    if (event.data === 1) {
+      socket.emit("play", { roomId, time: player.getCurrentTime() });
+    } else if (event.data === 2) {
+      socket.emit("pause", { roomId, time: player.getCurrentTime() });
+    }
   };
 
   return (
@@ -32,9 +58,6 @@ export const Player = ({ videoId }) => {
         onStateChange={onStateChange}
         ref={playerRef}
       />
-      <div className="mt-2 text-sm">
-        Current Time: {Math.floor(currentTime)} seconds
-      </div>
     </div>
   );
 };

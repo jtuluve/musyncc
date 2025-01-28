@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { searchTracks, getSimilarTracks } from "@/lib/youtube";
 import { Player } from "@/components/Player";
+import { useSocket } from "@/components/SocketContext";
+
 interface YouTubeTrack {
   id: {
     videoId: string;
@@ -13,11 +15,38 @@ interface YouTubeTrack {
     channelTitle: string;
   };
 }
-export default function Home() {
+
+export default function Room({ params }: { params: Promise<{ id: string }> }) {
+  // Handle room ID
+  const { id } = use(params);
+  const { socket, setRoomId } = useSocket();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentTrack, setCurrentTrack] = useState<YouTubeTrack | null>(null);
   const [similarTracks, setSimilarTracks] = useState<YouTubeTrack[]>([]);
   const [submit, setSubmit] = useState(false);
+
+  // Fetch the room ID from params
+  useEffect(() => {
+    setRoomId(id);
+  }, []);
+
+  // Connect to the socket room once the ID is ready
+  useEffect(() => {
+    if (!id || !socket) return;
+
+    socket.emit("join-room", id);
+
+    // Handle server response for joining a room
+    socket.on("joined-room", (roomId) => {
+      console.log("Joined room:", roomId);
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      socket.emit("leave-room", { roomId: id });
+      socket.off("joined-room");
+    };
+  }, [id, socket]);
 
   // Search query
   const { data: searchResults } = useQuery({
@@ -33,17 +62,21 @@ export default function Home() {
   const { data: similarData } = useQuery({
     queryKey: ["similar", currentTrack?.id?.videoId],
     queryFn: () => {
+      console.log("Called similar");
       if (!currentTrack) throw new Error("No track selected");
-      setCurrentTrack(null);
       return getSimilarTracks(currentTrack.snippet.title);
     },
-    enabled: !!currentTrack,
+    enabled: submit && !!currentTrack,
   });
 
   // Update similar tracks when query succeeds
   useEffect(() => {
     if (similarData) setSimilarTracks(similarData);
   }, [similarData]);
+
+  if (!id) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="p-8 max-w-4xl mx-auto">

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "mongoose": "^8.9.5",
+    "socket.io": "^4.8.1"
+  }
+}

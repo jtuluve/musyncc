@@ -17,6 +17,7 @@ export const SocketProvider = ({ children }) => {
       newSocket.close();
     };
   }, []);
+
   return (
     <ioContext.Provider value={{ socket, roomId, setRoomId }}>
       {children}

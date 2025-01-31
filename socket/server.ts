@@ -14,30 +14,30 @@ const io = new Server(server, {
 // Handle socket connection
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
+  console.log("Initial rooms:", socket.rooms);
 
   // Join a room
-  socket.on("join-room", (roomId) => {
-    socket.join(roomId);
-    socket.emit("joined-room", `Joined room: ${roomId}`);
-    console.log(`User ${socket.id} joined room: ${roomId}`);
+  socket.on("join-room", async (roomId) => {
+    await socket.join(roomId);
+    io.to(roomId).emit("joined-room", { roomId, sender: socket.id });
   });
 
   // Handle custom events in a room
-  socket.on("play", ({ roomId, time }) => {
-    console.log(`Play: ${time}`);
-    socket.to(roomId).emit("play-client", { sender: socket.id, time });
+  socket.on("play", ({ roomId, time, video, to }) => {
+    console.log(`Play: ${time} - ${roomId}`);
+    io.to(to ?? roomId).emit("play-client", { sender: socket.id, time, video });
   });
 
-  socket.on("pause", ({ roomId, time }) => {
+  socket.on("pause", ({ roomId, time, to }) => {
     console.log(`Pause: ${time} - ${roomId}`);
-    socket.to(roomId).emit("pause-client", { sender: socket.id, time });
+    io.to(to ?? roomId).emit("pause-client", { sender: socket.id, time });
   });
 
   // Leave a room
   socket.on("leave-room", (roomId) => {
     socket.leave(roomId);
     console.log(`User ${socket.id} left room: ${roomId}`);
-    socket.to(roomId).emit("user-left", `User ${socket.id} left the room.`);
+    socket.to(roomId).emit("left-room", socket.id);
   });
 
   // Handle disconnect

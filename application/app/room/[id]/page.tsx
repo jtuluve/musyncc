@@ -11,7 +11,7 @@ export default function Room({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     setRoomId(id);
   }, []);
-  
+
   // Connect to the socket room
   useEffect(() => {
     if (!roomId || !socket) return;
@@ -23,9 +23,13 @@ export default function Room({ params }: { params: Promise<{ id: string }> }) {
   }, [roomId, socket]);
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">YouTube Music</h1>
-      <SearchLists/>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-purple-800 dark:bg-black">
+      <div className="p-8 pb-0 max-w-4xl mx-auto min-h-screen">
+        <h1 className="text-4xl font-bold mb-8 text-purple-200">
+          YouTube Music
+        </h1>
+        <SearchLists />
+      </div>
       <Player />
     </div>
   );

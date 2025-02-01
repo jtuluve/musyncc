@@ -1,21 +1,37 @@
 "use client";
-import {
+import React, {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { useSocket } from "./SocketContext";
 import { YouTubeTrack } from "@/types";
 import YouTube from "react-youtube";
 
-const greatContext = createContext({
+const greatContext = createContext<{
+  playerRef: React.RefObject<YouTube>;
+  video: React.RefObject<YouTubeTrack>;
+  recievedCommand: React.RefObject<"play" | "pause">;
+  recievedTime: React.RefObject<number>;
+  recievedVideo: React.RefObject<YouTubeTrack>;
+  similarTracks: YouTubeTrack[];
+  setSimilarTracks: React.Dispatch<React.SetStateAction<YouTubeTrack[]>>;
+  curIndex: React.RefObject<number>;
+  isMyTrack: React.RefObject<boolean>;
+  shouldPlay: React.RefObject<boolean>;
+}>({
   playerRef: null,
   video: null,
   recievedCommand: null,
   recievedTime: null,
   recievedVideo: null,
+  similarTracks: [],
+  setSimilarTracks: null,
+  curIndex: null,
+  isMyTrack: null,
+  shouldPlay: null,
 });
 export const useGreat = () => useContext(greatContext);
 export const GreatProvider = ({ children }) => {
@@ -37,6 +53,10 @@ export const GreatProvider = ({ children }) => {
   const recievedTime = useRef<number>(null);
   const playerRef = useRef<YouTube>(null);
   const recievedCommand = useRef<"play" | "pause">(null);
+  const [similarTracks, setSimilarTracks] = useState<YouTubeTrack[]>([]);
+  const curIndex = useRef<number>(0);
+  const isMyTrack = useRef<boolean>(true);
+  const shouldPlay = useRef<boolean>(false)
 
   useEffect(() => {
     if (!socket || !playerRef.current) return;
@@ -55,9 +75,13 @@ export const GreatProvider = ({ children }) => {
         video.current.id.videoId === video2.id.videoId &&
         playerRef.current.internalPlayer.getPlayerState() === -1
       ) {
-        await playerRef.current.internalPlayer.load;
+        await playerRef.current.internalPlayer.loadVideoById(
+          video.current.id.videoId,
+          time
+        );
       }
       if (video.current.id.videoId !== video2.id.videoId) {
+        isMyTrack.current = false;
         video.current = video2;
         recievedVideo.current = video2;
         await playerRef.current.internalPlayer.loadVideoById(
@@ -113,6 +137,11 @@ export const GreatProvider = ({ children }) => {
         recievedCommand,
         recievedTime,
         recievedVideo,
+        similarTracks,
+        setSimilarTracks,
+        curIndex,
+        isMyTrack,
+        shouldPlay
       }}
     >
       {children}

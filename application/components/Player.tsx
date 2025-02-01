@@ -162,12 +162,12 @@ export const Player = () => {
   };
 
   const handlePrev = async () => {
-    if (!playerRef.current?.internalPlayer) return;
+    if (!playerRef.current?.internalPlayer || !isMyTrack.current) return;
     video.current =
-      similarTracks[
+      similarTracks.current[
         (curIndex.current == 0
-          ? similarTracks.length - 1
-          : curIndex.current--) % similarTracks.length
+          ? similarTracks.current?.length - 1
+          : curIndex.current--) % similarTracks.current?.length
       ];
     await playerRef.current.internalPlayer.loadVideoById(
       video.current.id.videoId
@@ -178,8 +178,10 @@ export const Player = () => {
   };
 
   const handleNext = async () => {
-    if (!similarTracks.length || !isMyTrack.current) return;
-    video.current = similarTracks[curIndex.current++ % similarTracks.length];
+    if (!similarTracks.current?.length || !isMyTrack.current) return;
+    console.log(similarTracks);
+    video.current =
+      similarTracks.current[curIndex.current++ % similarTracks.current?.length];
     await playerRef.current.internalPlayer.loadVideoById(
       video.current.id.videoId
     );

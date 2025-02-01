@@ -10,14 +10,14 @@ export function SearchLists() {
   const {
     video,
     playerRef,
-    setSimilarTracks,
-    similarTracks,
     isMyTrack,
     curIndex,
+    similarTracks: similarTracksRef
   } = useGreat();
   const searchQuery = useRef("");
   const [searchValue, setSearchValue] = useState("");
   const [submit, setSubmit] = useState(false);
+  const [similarTracks, setSimilarTracks] = useState<YouTubeTrack[]>([]);
   const queryClient = useQueryClient();
   // Search query
   const { data: searchResults } = useQuery({
@@ -50,7 +50,10 @@ export function SearchLists() {
   };
 
   useEffect(() => {
-    if (similarData) setSimilarTracks(similarData);
+    if (similarData){
+      setSimilarTracks(similarData);
+      similarTracksRef.current = similarData;
+    }
   }, [similarData]);
 
   return (

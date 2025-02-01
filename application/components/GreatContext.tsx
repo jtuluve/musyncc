@@ -16,8 +16,7 @@ const greatContext = createContext<{
   recievedCommand: React.RefObject<"play" | "pause">;
   recievedTime: React.RefObject<number>;
   recievedVideo: React.RefObject<YouTubeTrack>;
-  similarTracks: YouTubeTrack[];
-  setSimilarTracks: React.Dispatch<React.SetStateAction<YouTubeTrack[]>>;
+  similarTracks: React.RefObject<YouTubeTrack[]>;
   curIndex: React.RefObject<number>;
   isMyTrack: React.RefObject<boolean>;
   shouldPlay: React.RefObject<boolean>;
@@ -27,8 +26,7 @@ const greatContext = createContext<{
   recievedCommand: null,
   recievedTime: null,
   recievedVideo: null,
-  similarTracks: [],
-  setSimilarTracks: null,
+  similarTracks: null,
   curIndex: null,
   isMyTrack: null,
   shouldPlay: null,
@@ -53,10 +51,10 @@ export const GreatProvider = ({ children }) => {
   const recievedTime = useRef<number>(null);
   const playerRef = useRef<YouTube>(null);
   const recievedCommand = useRef<"play" | "pause">(null);
-  const [similarTracks, setSimilarTracks] = useState<YouTubeTrack[]>([]);
+  const similarTracks = useRef<YouTubeTrack[]>([]);
   const curIndex = useRef<number>(0);
   const isMyTrack = useRef<boolean>(true);
-  const shouldPlay = useRef<boolean>(false)
+  const shouldPlay = useRef<boolean>(false);
 
   useEffect(() => {
     if (!socket || !playerRef.current) return;
@@ -129,6 +127,10 @@ export const GreatProvider = ({ children }) => {
     };
   }, [socket, playerRef.current]);
 
+  function setSimilarTracks(tracks) {
+    similarTracks.current = tracks;
+  }
+
   return (
     <greatContext.Provider
       value={{
@@ -138,10 +140,9 @@ export const GreatProvider = ({ children }) => {
         recievedTime,
         recievedVideo,
         similarTracks,
-        setSimilarTracks,
         curIndex,
         isMyTrack,
-        shouldPlay
+        shouldPlay,
       }}
     >
       {children}

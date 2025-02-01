@@ -167,7 +167,7 @@ export const Player = () => {
       similarTracks.current[
         (curIndex.current == 0
           ? similarTracks.current?.length - 1
-          : curIndex.current--) % similarTracks.current?.length
+          : --curIndex.current) % similarTracks.current?.length
       ];
     await playerRef.current.internalPlayer.loadVideoById(
       video.current.id.videoId

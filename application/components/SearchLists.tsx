@@ -12,7 +12,7 @@ export function SearchLists() {
     playerRef,
     isMyTrack,
     curIndex,
-    similarTracks: similarTracksRef
+    similarTracks: similarTracksRef,
   } = useGreat();
   const searchQuery = useRef("");
   const [searchValue, setSearchValue] = useState("");
@@ -50,7 +50,7 @@ export function SearchLists() {
   };
 
   useEffect(() => {
-    if (similarData){
+    if (similarData) {
       setSimilarTracks(similarData);
       similarTracksRef.current = similarData;
     }
@@ -95,7 +95,7 @@ export function SearchLists() {
         {/* Similar Tracks */}
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-purple-200">
-            Similar Songs
+            Upcoming
           </h2>
           {similarTracks?.map((track) => (
             <div

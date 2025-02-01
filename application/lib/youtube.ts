@@ -17,7 +17,7 @@ export const searchTracks = async (query: string): Promise<YouTubeTrack[]> => {
       console.warn(`API key failed: ${apiKey}, trying next...`);
     }
   }
-  
+
   // If all API keys fail, throw an error
   throw new Error("All API keys failed. Keys or quota?.");
 };
@@ -43,11 +43,14 @@ export const getSimilarTracks = async (video: YouTubeTrack): Promise<YouTubeTrac
       const response = await axios.get(url);
 
       // Filter & return unique results
-      const uniqueTracks = response.data.items.filter(
+      const uniqueTracks: YouTubeTrack[] = response.data.items.filter(
         (track: any) => track.id.videoId !== video.id.videoId
       );
 
-      return uniqueTracks as YouTubeTrack[];
+      return uniqueTracks.map(e => {
+        e.snippet.title = decodeURI(e.snippet.title);
+        return e
+      });
     } catch (error) {
       console.warn(`API key failed: ${apiKey}, trying next...`);
     }

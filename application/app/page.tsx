@@ -17,7 +17,7 @@ const HomePage = () => {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <img src="/music.svg" className="w-12 h-12 text-purple-300" />
+            <img src="/logo.png" className="w-14 h-14 text-purple-300" />
             <h1 className="text-5xl font-bold text-white ml-4">Musync</h1>
           </div>
           <p className="text-xl text-purple-200 max-w-md mx-auto">

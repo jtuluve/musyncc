@@ -7,3 +7,8 @@ export interface YouTubeTrack {
     channelTitle: string;
   };
 }
+
+export interface chat {
+  name: string,
+  message: string
+}

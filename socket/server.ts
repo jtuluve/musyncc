@@ -33,6 +33,10 @@ io.on("connection", (socket) => {
     io.to(to ?? roomId).emit("pause-client", { sender: socket.id, time });
   });
 
+  socket.on("chat", ({ name, roomId, message }) => {
+    io.to(roomId).emit("chat-client", { sender: socket.id, name, message });
+  })
+
   // Leave a room
   socket.on("leave-room", (roomId) => {
     socket.leave(roomId);

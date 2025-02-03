@@ -219,7 +219,7 @@ export const Player = () => {
           onStateChange={handleStateChange}
         />
       </div>
-      <div className="sticky bottom-0 left-0 w-full bg-indigo-900/95 backdrop-blur-md border-t border-purple-400/20">
+      <div className="w-full bg-indigo-900/95 backdrop-blur-md border-t border-purple-400/20">
         {/* Slider at the top */}
         <div className="w-full px-4 pt-2">
           <input

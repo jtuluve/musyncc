@@ -75,37 +75,41 @@ export function SearchLists() {
         />
       </form>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1 min-h-0">
         {/* Search Results */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4 text-purple-200">
+        <div className="flex flex-col min-h-0">
+          <h2 className="text-2xl font-semibold mb-4 text-purple-200 min-h-0">
             Search Results
           </h2>
-          {searchResults?.map((track) => (
-            <div
-              key={track.id.videoId}
-              onClick={() => handleTrackSelect(track)}
-              className="p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 cursor-pointer hover:bg-white/10 transition-colors mb-2"
-            >
-              {track.snippet.title}
-            </div>
-          ))}
+          <div className="flex-1 overflow-y-auto">
+            {searchResults?.map((track) => (
+              <div
+                key={track.id.videoId}
+                onClick={() => handleTrackSelect(track)}
+                className="p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 cursor-pointer hover:bg-white/10 transition-colors mb-2"
+              >
+                {track.snippet.title}
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Similar Tracks */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4 text-purple-200">
+        {/* Upcoming Tracks */}
+        <div className="flex flex-col min-h-0">
+          <h2 className="text-2xl font-semibold mb-4 text-purple-200 sticky top-0 z-10">
             Upcoming
           </h2>
-          {similarTracks?.map((track) => (
-            <div
-              key={track.id.videoId}
-              onClick={() => handleTrackSelect(track)}
-              className="p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 cursor-pointer hover:bg-white/10 transition-colors mb-2"
-            >
-              {track.snippet.title}
-            </div>
-          ))}
+          <div className="h-full overflow-auto">
+            {similarTracks?.map((track) => (
+              <div
+                key={track.id.videoId}
+                onClick={() => handleTrackSelect(track)}
+                className="p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 cursor-pointer hover:bg-white/10 transition-colors mb-2"
+              >
+                {track.snippet.title}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

@@ -14,8 +14,31 @@
   }
 }
 
+* {
+  scroll-margin: 2px;
+}
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2d1b4a; /* Dark purple track */
+  border-radius: 4px;
+  padding: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8b5cf6; /* Light purple scrollbar */
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a78bfa;
 }

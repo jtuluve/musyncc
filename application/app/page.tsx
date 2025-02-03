@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const HomePage = () => {
   const [roomCode, setRoomCode] = useState("");
@@ -10,6 +10,9 @@ const HomePage = () => {
       window.location.href = `/room/${roomCode}`;
     }
   };
+  useEffect(() => {
+    fetch(process.env.NEXT_PUBLIC_SOCKET_URL);
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-purple-800">
@@ -54,6 +57,14 @@ const HomePage = () => {
             <p className="text-purple-300">
               Stay in perfect harmony with synchronized playback across all
               devices
+            </p>
+          </div>
+          <div className="text-center p-6 bg-white/5 rounded-xl backdrop-blur-sm">
+            <h3 className="text-xl font-semibold text-purple-200 mb-2">
+              Real-time Chat
+            </h3>
+            <p className="text-purple-300">
+              Chat with your friends while enjoying the music.
             </p>
           </div>
           <div className="text-center p-6 bg-white/5 rounded-xl backdrop-blur-sm">

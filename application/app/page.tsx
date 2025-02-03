@@ -49,8 +49,9 @@ const HomePage = () => {
         </div>
 
         {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl mx-auto">
           <div className="text-center p-6 bg-white/5 rounded-xl backdrop-blur-sm">
+            <img src="/radio.svg" className="w-16 h-16 mb-2 mx-auto" />
             <h3 className="text-xl font-semibold text-purple-200 mb-2">
               Real-time Sync
             </h3>
@@ -60,6 +61,10 @@ const HomePage = () => {
             </p>
           </div>
           <div className="text-center p-6 bg-white/5 rounded-xl backdrop-blur-sm">
+            <img
+              src="/messages-square.svg"
+              className="w-16 h-16 mb-2 mx-auto"
+            />
             <h3 className="text-xl font-semibold text-purple-200 mb-2">
               Real-time Chat
             </h3>
@@ -68,6 +73,7 @@ const HomePage = () => {
             </p>
           </div>
           <div className="text-center p-6 bg-white/5 rounded-xl backdrop-blur-sm">
+            <img src="/disc-3.svg" className="w-16 h-16 mb-2 mx-auto" />
             <h3 className="text-xl font-semibold text-purple-200 mb-2">
               Shared Control
             </h3>
@@ -76,6 +82,10 @@ const HomePage = () => {
             </p>
           </div>
           <div className="text-center p-6 bg-white/5 rounded-xl backdrop-blur-sm">
+            <img
+              src="/monitor-smartphone.svg"
+              className="w-16 h-16 mb-2 mx-auto"
+            />
             <h3 className="text-xl font-semibold text-purple-200 mb-2">
               Cross-Platform
             </h3>
@@ -88,7 +98,7 @@ const HomePage = () => {
         {/* Additional Features Section */}
         <div className="mt-24 max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-white text-center mb-12">
-            Why Choose Musync?
+            Why Choose Musyncc?
           </h2>
           <div className="space-y-8">
             <div className="bg-white/5 rounded-xl p-8 backdrop-blur-sm">
@@ -127,7 +137,7 @@ const HomePage = () => {
 
         {/* Footer */}
         <footer className="text-center mt-24 text-purple-300">
-          <p>© 2024 Musync. All rights reserved.</p>
+          <p>© 2024 Musyncc. All rights reserved.</p>
         </footer>
       </div>
     </div>

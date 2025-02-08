@@ -41,8 +41,18 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (roomId) => {
     socket.leave(roomId);
     console.log(`User ${socket.id} left room: ${roomId}`);
-    socket.to(roomId).emit("left-room", socket.id);
+    io.to(roomId).emit("left-room", socket.id);
   });
+
+  // handle disconnecting and broadcast the left room event
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach((roomId) => {
+      if (socket.id === roomId) return;
+      socket.leave(roomId);
+      console.log(`User ${socket.id} left room: ${roomId}`);
+      io.to(roomId).emit("left-room", socket.id);
+    });
+  })
 
   // Handle disconnect
   socket.on("disconnect", (e) => {

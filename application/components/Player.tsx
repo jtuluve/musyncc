@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { useSocket } from "./SocketContext";
 import { useGreat } from "./GreatContext";
@@ -31,11 +31,11 @@ export const Player = () => {
   const videoTitleRef = useRef<HTMLDivElement>(null);
 
   let videoId = video.current.id?.videoId;
-  const opts = {
+  const opts: YouTubeProps["opts"] = {
     height: "200",
     width: "100%",
     playerVars: {
-      autoplay: playingRef.current ? 1 : 0,
+      autoplay: 0,
       controls: 1,
       modestbranding: 1,
     },
@@ -65,6 +65,7 @@ export const Player = () => {
   const handleStateChange: YouTubeProps["onStateChange"] = async (event) => {
     console.log(event.data);
     const curTime = await playerRef.current.internalPlayer.getCurrentTime();
+
     // Update frontend
     if (event.data === 1) {
       playingRef.current = true;
@@ -211,14 +212,13 @@ export const Player = () => {
 
   return (
     <>
-      <div className="hidden">
-        <YouTube
-          videoId={videoId}
-          opts={opts}
-          ref={playerRef}
-          onStateChange={handleStateChange}
-        />
-      </div>
+      <YouTube
+        videoId={videoId}
+        opts={opts}
+        ref={playerRef}
+        onStateChange={handleStateChange}
+        className="hidden"
+      />
       <div className="w-full bg-indigo-900/95 backdrop-blur-md border-t border-purple-400/20">
         {/* Slider at the top */}
         <div className="w-full px-4 pt-2">

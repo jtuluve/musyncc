@@ -3,13 +3,16 @@
 import { ChatSection } from "@/components/ChatSection";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Player } from "@/components/Player";
+import PopupNotification from "@/components/Popup";
 import { SearchLists } from "@/components/SearchLists";
 import { useSocket } from "@/components/SocketContext";
-import { use, useEffect } from "react";
+import { RefObject, use, useEffect, useRef } from "react";
 
 export default function Room({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { roomId, socket, setRoomId } = useSocket();
+  const joinedPopupRef = useRef<HTMLDivElement>(null);
+  const leftPopupRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     setRoomId(id);
   }, []);
@@ -19,10 +22,45 @@ export default function Room({ params }: { params: Promise<{ id: string }> }) {
     if (!roomId || !socket) return;
     socket.emit("join-room", roomId);
 
+    socket.on("joined-room", ({ sender }) => {
+      console.log("Triggered");
+      if (sender === socket.id) return;
+      showPopup(joinedPopupRef);
+    });
+
+    socket.on("left-room", (sender) => {
+      if (sender === socket.id) return;
+      console.log("GOt event");
+      showPopup(leftPopupRef);
+    });
+
     return () => {
       socket.emit("leave-room", roomId);
+      socket.off("joined-room");
+      socket.off("left-room");
     };
   }, [roomId, socket]);
+
+  // helper
+  function showPopup(ref: RefObject<HTMLDivElement>) {
+    if (ref.current) {
+      ref.current.style.opacity = "1";
+      ref.current.style.bottom = "60px";
+      ref.current.style.display = "block";
+    }
+
+    setTimeout(() => {
+      if (ref.current) {
+        ref.current.style.opacity = "0";
+        setTimeout(() => {
+          if (ref.current) {
+            ref.current.style.display = "none";
+            ref.current.style.bottom = "-10px";
+          }
+        }, 500);
+      }
+    }, 3000);
+  }
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-indigo-900 via-purple-900 to-purple-800">
@@ -35,7 +73,7 @@ export default function Room({ params }: { params: Promise<{ id: string }> }) {
             <span className="text-3xl text-purple-500"> ({id})</span>
           </h1>
           <div className="hidden md:contents relative">
-            <SearchLists/>
+            <SearchLists />
           </div>
           <MobileLayout />
         </div>
@@ -46,7 +84,11 @@ export default function Room({ params }: { params: Promise<{ id: string }> }) {
         </div>
       </div>
 
-      {/* Player stays at bottom */}
+      {/* Pop ups */}
+      <PopupNotification text="Someone joined the room" ref={joinedPopupRef} />
+      <PopupNotification text="Someone left the room" ref={leftPopupRef} />
+
+      {/* Music Player */}
       <Player />
     </div>
   );

@@ -1,11 +1,5 @@
 "use client";
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useSocket } from "./SocketContext";
 import { YouTubeTrack } from "@/types";
 import YouTube from "react-youtube";
@@ -66,6 +60,7 @@ export const GreatProvider = ({ children }) => {
       if (
         (await playerRef.current.internalPlayer.getPlayerState()) === 1 &&
         video.current.id.videoId === video2.id.videoId &&
+        curTime &&
         Math.abs(curTime - time) < 5
       )
         return;
@@ -92,6 +87,7 @@ export const GreatProvider = ({ children }) => {
       await playerRef.current.internalPlayer.playVideo();
       recievedTime.current = time;
       recievedCommand.current = "play";
+      shouldPlay.current = true;
     });
 
     socket.on("pause-client", async ({ sender, time }) => {

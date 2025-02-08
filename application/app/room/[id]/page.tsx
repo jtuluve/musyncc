@@ -68,9 +68,11 @@ export default function Room({ params }: { params: Promise<{ id: string }> }) {
         {/* Main Content */}
         <div className="flex flex-col flex-1 p-8 pb-0">
           <h1 className="text-4xl font-bold mb-8 text-purple-200 flex items-center">
-            <img src="/logo.png" className="w-14 h-14 inline-block mr-2" />
-            Musyncc
-            <span className="text-3xl text-purple-500"> ({id})</span>
+            <a href="/">
+              <img src="/logo.png" className="w-14 h-14 inline-block mr-2" />
+              Musyncc
+            </a>
+            <span className="text-3xl text-purple-500">&nbsp;({id})</span>
           </h1>
           <div className="hidden md:contents relative">
             <SearchLists />

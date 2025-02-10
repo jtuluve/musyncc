@@ -1,6 +1,7 @@
 # Musyncc
 
 Musyncc is a web-based platform that enables users to sync their music playback in real time. Whether you're hosting a virtual party or sharing a playlist with friends, Musyncc makes it seamless to create or join rooms and enjoy music together.
+Try it out here: [https://musyncc.vercel.app/](https://musyncc.vercel.app/)
 
 ## Table of Contents
 

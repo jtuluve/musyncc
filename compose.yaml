@@ -1,0 +1,11 @@
+services:
+  app:
+    depends_on:
+      - socket
+    build: ./application
+    ports:
+      - "3000:3000"
+  socket:
+    build: ./socket
+    ports:
+      - "3001:3001"
